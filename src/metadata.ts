@@ -39,11 +39,11 @@ Puedes encontrarlo en:
 
 export const DESCRIPTION = (lang = 'en') => lang === 'en' ? `
 
-The Advent JS is an iniatitive by @midudev
+The Advent JS is an iniatitive by @midudev, Miguel Ángel Durán García
 
 Check out the official website: https://adventjs.dev/
 
-This is CLI is designed to test your solutions locally before submitting them to the platform.
+This version is designed to test your solutions locally before submitting them to the platform.
 Your code will be tested against the public test cases and in some cases against some random test cases.
 You can use wheter JavaScript or TypeScript to solve the problems.
 This description will be shown once the CLI is executed for the first time, after that, you
@@ -56,11 +56,11 @@ This CLI will help you to:
 - Focus on solving the problem in a local environment before submitting it to the platform
 - Avoid code overhead by setting up a repository to share your solutions
 ` : `
-El Advent JS es una iniciativa de @midudev - Midudev
+El Advent JS es una iniciativa de @midudev, Miguel Ángel Durán García
 
 Echa un vistazo al sitio web oficial: https://adventjs.dev/
 
-Esta CLI está diseñada para probar tus soluciones localmente antes de enviarlas a la plataforma.
+Esta versión está diseñada para probar tus soluciones localmente antes de enviarlas a la plataforma.
 Tu código será probado contra los casos de prueba públicos y en algunos casos contra algunos casos de prueba aleatorios.
 Puedes usar JavaScript o TypeScript para resolver los problemas.
 Esta descripción se mostrará una vez que se ejecute la CLI por primera vez, después de eso, puedes
@@ -87,40 +87,3 @@ export const INITIAL_CONFIG = (lang = 'en'): Config => lang === 'en'
         flavor: "js",
         showDescription: true,
     };
-
-import { DOMParser } from "https://deno.land/x/deno_dom@v0.1.45/deno-dom-wasm.ts";
-import { assert } from "https://deno.land/std@0.217.0/assert/mod.ts";
-import type { ProblemDescription } from "./types.d.ts";
-
-const BASE_URL = (lang = 'en') => `https://adventjs.dev/${lang === 'en'
-    ? '' : 'es/'}challenges/2023/`;
-
-export const FETCH_PROBLEM_DATA = async ({
-    lang = 'en',
-    problem = 1,
-}): Promise<ProblemDescription> => {
-    const url = `${BASE_URL(lang)}${problem}`;
-    const response = await fetch(url);
-    const text = await response.text();
-    // get the #challenge div
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(text, "text/html");
-    assert(doc);
-    const challenge = doc.querySelector('#challenge');
-    assert(challenge);
-    // span with class "block truncate" inside header
-    // contains the problem title
-    const title = doc.querySelector('header span.block.truncate');
-    assert(title);
-    // Get the first 3 CamelCase words from challenge
-    // remove them, and get the last one to display the problem level
-    const RGX = /([A-Z][a-z]+){3}/g;
-    const ABC = challenge.textContent.match(RGX);
-    assert(ABC);
-    const [dsc_msg, _r, level] = ABC[0].split(/([A-Z][a-z]+)/).filter(Boolean);
-    return {
-        title: title.textContent,
-        level,
-        description: `${dsc_msg}\n\n${challenge.textContent.replace(RGX, '')}`
-    };
-}
