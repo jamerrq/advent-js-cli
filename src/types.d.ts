@@ -22,5 +22,9 @@ export interface Problem {
 export interface ProblemDescription {
     title: string;
     level: string;
+    lvl_code: 0 | 1 | 2;
+    dsc_msg: string;
     description: string;
+    code: string;
+    ref: string;
 }

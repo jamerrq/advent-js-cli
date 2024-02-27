@@ -2,6 +2,7 @@
   "version": "3",
   "packages": {
     "specifiers": {
+      "npm:@speed-highlight/core": "npm:@speed-highlight/core@1.2.6",
       "npm:vitest": "npm:vitest@1.3.1"
     },
     "npm": {
@@ -161,6 +162,10 @@
       },
       "@sinclair/typebox@0.27.8": {
         "integrity": "sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==",
+        "dependencies": {}
+      },
+      "@speed-highlight/core@1.2.6": {
+        "integrity": "sha512-kzS2W5fLGz2wcmA+4JoMlw3eglj2NqYTdzU/Db1P9phIJ20glYFW4tGpPRfpqP08qEn2H0NV9/7E8kh5/iaTgQ==",
         "dependencies": {}
       },
       "@types/estree@1.0.5": {
@@ -764,6 +769,13 @@
     "https://deno.land/x/deno_dom@v0.1.45/src/dom/selectors/sizzle.js": "c3aed60c1045a106d8e546ac2f85cc82e65f62d9af2f8f515210b9212286682a",
     "https://deno.land/x/deno_dom@v0.1.45/src/dom/utils-types.ts": "96db30e3e4a75b194201bb9fa30988215da7f91b380fca6a5143e51ece2a8436",
     "https://deno.land/x/deno_dom@v0.1.45/src/dom/utils.ts": "4c6206516fb8f61f37a209c829e812c4f5a183e46d082934dd14c91bde939263",
-    "https://deno.land/x/deno_dom@v0.1.45/src/parser.ts": "e06b2300d693e6ae7564e53dfa5c9a9e97fdb8c044c39c52c8b93b5d60860be3"
+    "https://deno.land/x/deno_dom@v0.1.45/src/parser.ts": "e06b2300d693e6ae7564e53dfa5c9a9e97fdb8c044c39c52c8b93b5d60860be3",
+    "https://deno.land/x/speed_highlight_js@v1.2.6/src/common.js": "c4dc3904994ebe0fce83c87dad2f3a25ef03995a56cb4ea71659ad04bdab43bf",
+    "https://deno.land/x/speed_highlight_js@v1.2.6/src/index.js": "acf02b9a8b050159001c5919477224175d60fb8d30bde6ce339c22e3cf1e42a5",
+    "https://deno.land/x/speed_highlight_js@v1.2.6/src/languages/js.js": "b185c6eb8d0f95c8dfaefd7476493d974cfd9cb4027a4aaa4cb9f84e694cb1db",
+    "https://deno.land/x/speed_highlight_js@v1.2.6/src/languages/todo.js": "4d2d88419d0a21a9327bb4bc6bb10ee2ab13181fcb6f2d1caf89abdb56c0db19",
+    "https://deno.land/x/speed_highlight_js@v1.2.6/src/terminal.js": "5b163d34809959f594666ce4a49fb3d735557ed701e5d3ecc5ebbe63078adcf4",
+    "https://deno.land/x/speed_highlight_js@v1.2.6/src/themes/default.js": "5ef771ecf555b238123009ef1daf5eadbb293fbc617d173e073da545210c0422",
+    "https://deno.land/x/speed_highlight_js@v1.2.6/src/themes/termcolor.js": "6de57e66e6a596c9da53fc467cd24b05f3429abb79e74ef04385b8947d4c8b03"
   }
 }

@@ -2,12 +2,13 @@ import { Number, Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mo
 import { delay } from 'https://deno.land/x/delay@v0.2.0/mod.ts';
 import { colors, } from "https://deno.land/x/cliffy@v1.0.0-rc.3/ansi/mod.ts";
 import * as mod from "https://deno.land/std@0.217.0/fs/mod.ts";
+import { printHighlight } from 'https://deno.land/x/speed_highlight_js@v1.2.6/src/terminal.js';
 
 import { ADVENT_JS_LOGO, ALTERNATIVE_LOGO } from './logos.ts';
 import {
     DESCRIPTION, INITIAL_CONFIG, ABOUT_THE_AUTHOR, MIDU_LINKS,
-    FETCH_PROBLEM_DATA
 } from './metadata.ts';
+import { FETCH_PROBLEM_DATA } from './aux.ts';
 
 import type { Config } from "./types.d.ts";
 
@@ -66,7 +67,7 @@ async function printFlag({
         let print = "";
         for (const char of line) {
             if (!OUTSIDE_CHARS.includes(char)) {
-                if ("abcdefghijklmnopqrstuvwxyz".includes(char)) {
+                if ("CONSLEDIT".includes(char)) {
                     print += colors.bgRgb24(
                         colors.rgb24(colors.bold(char), 0xFFED00), 0x24408E);
                 } else print += colors.rgb24(colors.bold('█'), 0xFFED00);
@@ -99,6 +100,16 @@ async function chooseEdition(lang: string = "en"): Promise<void> {
         options: ["2023"],
         default: "2023",
     }) as unknown as '2023';
+}
+
+async function chooseFlavor(lang: string = "en"): Promise<void> {
+    CONFIG.flavor = await Select.prompt({
+        message: lang === "es"
+            ? "Elige el lenguaje para la solución de los problemas:"
+            : "Choose the language to solve the problems:",
+        options: ["JavaScript", "TypeScript"],
+        default: "JavaScript",
+    }) === "JavaScript" ? "js" : "ts";
 }
 
 /**
@@ -140,6 +151,10 @@ async function showCurrentConfig(): Promise<void> {
     await Deno.stdin.read(new Uint8Array(1));
 }
 
+/**
+ * Show the about the author of the Advent JS
+ * @returns void
+ * */
 async function showAboutAuthor(): Promise<void> {
     console.log(ABOUT_THE_AUTHOR(CONFIG.language));
     console.table(MIDU_LINKS);
@@ -150,6 +165,10 @@ async function showAboutAuthor(): Promise<void> {
     await Deno.stdin.read(new Uint8Array(1));
 }
 
+/**
+ * Show the problem information
+ * @returns void
+ * */
 async function showProblem(): Promise<void> {
     // ask for the problem number to show (1-25)
     const problemNumber = await Number.prompt({
@@ -166,20 +185,37 @@ async function showProblem(): Promise<void> {
         problem: problemNumber,
     });
     // show the problem description
-    console.log(problem.title);
-    console.log(`\nLevel: ${problem.level}\n`);
-    console.log(`%c${problem.description}`,
-        "text-wrap: balance;");
+    const { title, level, description, dsc_msg, code, ref, lvl_code } = problem;
+    console.log(`\n${title}`);
+    const colorsMap = {
+        0: colors.green,
+        1: colors.yellow,
+        2: colors.red,
+    };
+    console.log(`\n${colorsMap[lvl_code](level)}`);
+    console.log(colors.yellow(`\n${dsc_msg}`));
+    console.log(`\n${description}`);
+    if (code) {
+        console.log(colors.green(CONFIG.language === "es"
+            ? "\nAlgunos ejemplos:\n" : "\nSome examples:\n"));
+        await printHighlight(code, 'js');
+    }
+    console.log(colors.blue(ref));
     // wait for the user to press a key
     console.log(CONFIG.language === "es"
-        ? "Presiona una tecla para continuar"
-        : "Press a key to continue");
+        ? "〉 Presiona una tecla para continuar"
+        : "〉 Press a key to continue");
     await Deno.stdin.read(new Uint8Array(1));
 }
 
+/**
+ * Show the menu
+ * @returns void
+ * */
 async function menu(): Promise<void | 1> {
-    // Show the menu
-    console.log("Advent JS CLI Menu\n");
+    // yellow blue title
+    console.log(colors.bgRgb24(colors.rgb24(" ADVENT JS console edition ", 0xFFED00), 0x24408E));
+    console.log();
     const option = await Select.prompt({
         message: CONFIG.language === "es"
             ? "Elige una opción:" : "Choose an option:",
@@ -218,19 +254,7 @@ async function menu(): Promise<void | 1> {
             break;
         case "Salir":
         case "Exit":
-            console.log(
-                CONFIG.language === "es"
-                    ? "¡Nos vemos en otra ocasión!"
-                    : "See you later!"
-            );
             return 1;
-        default:
-            console.log(
-                CONFIG.language === "es"
-                    ? "Opción no válida"
-                    : "Invalid option"
-            );
-            break;
     }
 }
 
@@ -261,6 +285,9 @@ async function setup(override = false): Promise<void> {
 
     // Choose edition
     await chooseEdition(CONFIG.language);
+
+    // Choose flavor
+    await chooseFlavor(CONFIG.language);
 
     // Save changes
     await createConfigFile(CONFIG);
