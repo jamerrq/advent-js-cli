@@ -1,6 +1,6 @@
 {
-  "language": "es",
+  "language": "en",
   "version": "2023",
-  "flavor": "js",
-  "showDescription": true
+  "flavor": "ts",
+  "showDescription": false
 }
