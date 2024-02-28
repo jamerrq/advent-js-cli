@@ -9,6 +9,24 @@ export const FETCH_PROBLEM_DATA = async ({
     lang = 'en',
     problem = 1,
 }): Promise<ProblemDescription> => {
+    // check if problem is cached
+    const cachePath = `.cache/data/problems.json`;
+    const cache = await Deno.readFile(cachePath);
+    const decoder = new TextDecoder();
+    const cacheStr = decoder.decode(cache);
+    const problems = JSON.parse(cacheStr);
+    if (problems[problem]) {
+        return {
+            title: problems[problem].title[lang],
+            level: problems[problem].level[lang],
+            lvl_code: problems[problem].lvl_code,
+            dsc_msg: problems[problem].dsc_msg[lang],
+            description: problems[problem].description[lang],
+            code: problems[problem].code,
+            ref: problems[problem].ref[lang],
+        };
+    }
+    // fetch the problem
     const url = `${BASE_URL(lang)}${problem}`;
     const response = await fetch(url);
     const text = await response.text();
