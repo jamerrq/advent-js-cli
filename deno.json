@@ -1,5 +1,15 @@
 {
   "name": "@jamerrq/advent-js-cli",
   "version": "0.0.1",
-  "exports": "./mod.ts"
+  "exports": "./mod.ts",
+  "exclude": [
+    "aux.ts"
+  ],
+  "imports": {
+    "@cliffy-prompt": "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts",
+    "@delay": "https://deno.land/x/delay@v0.2.0/mod.ts",
+    "@cliffy-ansi": "https://deno.land/x/cliffy@v1.0.0-rc.3/ansi/mod.ts",
+    "@fs": "https://deno.land/std@0.217.0/fs/mod.ts",
+    "@speedHighlight": "https://deno.land/x/speed_highlight_js@v1.2.6/src/terminal.js"
+  }
 }
