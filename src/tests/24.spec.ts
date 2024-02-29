@@ -1,0 +1,440 @@
+import { assertInstanceOf, assertEquals } from "https://deno.land/std@0.217.0/assert/mod.ts";
+import { getStaircasePaths } from '../in/24.ts'
+
+const { test } = Deno
+
+test('Test #01', () => {
+    assertInstanceOf(getStaircasePaths, Function)
+})
+
+test('Test #02', () => {
+    const received = getStaircasePaths(4, 2)
+    const expected = [
+        [
+            1,
+            1,
+            1,
+            1
+        ],
+        [
+            1,
+            1,
+            2
+        ],
+        [
+            1,
+            2,
+            1
+        ],
+        [
+            2,
+            1,
+            1
+        ],
+        [
+            2,
+            2
+        ]
+    ]
+    assertEquals(received, expected)
+})
+
+test('Test #03', () => {
+    const received = getStaircasePaths(0, 0)
+    const expected = [
+        []
+    ]
+    assertEquals(received, expected)
+})
+
+test('Test #04', () => {
+    const received = getStaircasePaths(1, 1)
+    const expected = [
+        [
+            1
+        ]
+    ]
+    assertEquals(received, expected)
+})
+
+test('Test #05', () => {
+    const received = getStaircasePaths(7, 3)
+    const expected = [
+        [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+        ],
+        [
+            1,
+            1,
+            1,
+            1,
+            1,
+            2
+        ],
+        [
+            1,
+            1,
+            1,
+            1,
+            2,
+            1
+        ],
+        [
+            1,
+            1,
+            1,
+            1,
+            3
+        ],
+        [
+            1,
+            1,
+            1,
+            2,
+            1,
+            1
+        ],
+        [
+            1,
+            1,
+            1,
+            2,
+            2
+        ],
+        [
+            1,
+            1,
+            1,
+            3,
+            1
+        ],
+        [
+            1,
+            1,
+            2,
+            1,
+            1,
+            1
+        ],
+        [
+            1,
+            1,
+            2,
+            1,
+            2
+        ],
+        [
+            1,
+            1,
+            2,
+            2,
+            1
+        ],
+        [
+            1,
+            1,
+            2,
+            3
+        ],
+        [
+            1,
+            1,
+            3,
+            1,
+            1
+        ],
+        [
+            1,
+            1,
+            3,
+            2
+        ],
+        [
+            1,
+            2,
+            1,
+            1,
+            1,
+            1
+        ],
+        [
+            1,
+            2,
+            1,
+            1,
+            2
+        ],
+        [
+            1,
+            2,
+            1,
+            2,
+            1
+        ],
+        [
+            1,
+            2,
+            1,
+            3
+        ],
+        [
+            1,
+            2,
+            2,
+            1,
+            1
+        ],
+        [
+            1,
+            2,
+            2,
+            2
+        ],
+        [
+            1,
+            2,
+            3,
+            1
+        ],
+        [
+            1,
+            3,
+            1,
+            1,
+            1
+        ],
+        [
+            1,
+            3,
+            1,
+            2
+        ],
+        [
+            1,
+            3,
+            2,
+            1
+        ],
+        [
+            1,
+            3,
+            3
+        ],
+        [
+            2,
+            1,
+            1,
+            1,
+            1,
+            1
+        ],
+        [
+            2,
+            1,
+            1,
+            1,
+            2
+        ],
+        [
+            2,
+            1,
+            1,
+            2,
+            1
+        ],
+        [
+            2,
+            1,
+            1,
+            3
+        ],
+        [
+            2,
+            1,
+            2,
+            1,
+            1
+        ],
+        [
+            2,
+            1,
+            2,
+            2
+        ],
+        [
+            2,
+            1,
+            3,
+            1
+        ],
+        [
+            2,
+            2,
+            1,
+            1,
+            1
+        ],
+        [
+            2,
+            2,
+            1,
+            2
+        ],
+        [
+            2,
+            2,
+            2,
+            1
+        ],
+        [
+            2,
+            2,
+            3
+        ],
+        [
+            2,
+            3,
+            1,
+            1
+        ],
+        [
+            2,
+            3,
+            2
+        ],
+        [
+            3,
+            1,
+            1,
+            1,
+            1
+        ],
+        [
+            3,
+            1,
+            1,
+            2
+        ],
+        [
+            3,
+            1,
+            2,
+            1
+        ],
+        [
+            3,
+            1,
+            3
+        ],
+        [
+            3,
+            2,
+            1,
+            1
+        ],
+        [
+            3,
+            2,
+            2
+        ],
+        [
+            3,
+            3,
+            1
+        ]
+    ]
+    assertEquals(received, expected)
+})
+
+test('Test #06', () => {
+    const received = getStaircasePaths(3, 3)
+    const expected = [
+        [
+            1,
+            1,
+            1
+        ],
+        [
+            1,
+            2
+        ],
+        [
+            2,
+            1
+        ],
+        [
+            3
+        ]
+    ]
+    assertEquals(received, expected)
+})
+
+test('Test #07', () => {
+    const received = getStaircasePaths(2, 1)
+    const expected = [
+        [
+            1,
+            1
+        ]
+    ]
+    assertEquals(received, expected)
+})
+
+test('Test #08', () => {
+    const received = getStaircasePaths(5, 2)
+    const expected = [
+        [
+            1,
+            1,
+            1,
+            1,
+            1
+        ],
+        [
+            1,
+            1,
+            1,
+            2
+        ],
+        [
+            1,
+            1,
+            2,
+            1
+        ],
+        [
+            1,
+            2,
+            1,
+            1
+        ],
+        [
+            1,
+            2,
+            2
+        ],
+        [
+            2,
+            1,
+            1,
+            1
+        ],
+        [
+            2,
+            1,
+            2
+        ],
+        [
+            2,
+            2,
+            1
+        ]
+    ]
+    assertEquals(received, expected)
+})
