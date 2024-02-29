@@ -52,3 +52,7 @@ This CLI will help you to:
 - Test your solutions
 - Focus on solving the problem in a local environment before submitting it to the platform
 - Avoid code overhead by setting up a repository to share your solutions
+
+## Demo
+
+https://github.com/jamerrq/advent-js-cli/assets/35697365/df9dc624-6efa-4e38-8800-4ec6058a4586
