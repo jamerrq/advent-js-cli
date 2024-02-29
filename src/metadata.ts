@@ -691,7 +691,7 @@ export const PROBLEMS: Record<number, BiProblemDescription> = {
     }
 }
 
-export const TEMPLATES = {
+export const TEMPLATES: Record<number, string> = {
     1: "export function findFirstRepeated(gifts) {\n    // Code here\n    return 0\n}\n",
     2: "export function manufacture(gifts, materials) {\n    // Code here\n    return []\n}\n",
     3: "export function findNaughtyStep(original, modified) {\n    // Code here\n    return ''\n}\n",
