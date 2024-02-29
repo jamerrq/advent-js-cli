@@ -5,20 +5,6 @@ export interface Config {
     showDescription: boolean;
 }
 
-export interface Problem {
-    name: string;
-    emoji: string;
-    args: string;
-    longName: {
-        en: string;
-        es: string;
-    };
-    description: {
-        en: string;
-        es: string;
-    };
-}
-
 export interface ProblemDescription {
     title: string;
     level: string;
@@ -27,4 +13,29 @@ export interface ProblemDescription {
     description: string;
     code: string;
     ref: string;
+}
+
+export interface BiProblemDescription {
+    title: {
+        es: string;
+        en: string;
+    };
+    level: {
+        es: string;
+        en: string;
+    };
+    lvl_code: 0 | 1 | 2;
+    dsc_msg: {
+        es: string;
+        en: string;
+    };
+    description: {
+        es: string;
+        en: string;
+    };
+    code: string;
+    ref: {
+        es: string;
+        en: string;
+    };
 }
