@@ -53,6 +53,21 @@ This CLI will help you to:
 - Focus on solving the problem in a local environment before submitting it to the platform
 - Avoid code overhead by setting up a repository to share your solutions
 
+## Installation
+
+You must have Deno installed in your system to use this CLI.
+In case you don't have it, you can install it by following the instructions in the official website https://docs.deno.com/runtime/manual
+
+```bash
+deno install --allow-read --allow-write --allow-net --allow-run https://deno.land/x/adventjs@v1.0.1/mod.ts
+```
+
+## Usage
+
+```bash
+adventjs
+```
+
 ## Demo
 
 https://github.com/jamerrq/advent-js-cli/assets/35697365/df9dc624-6efa-4e38-8800-4ec6058a4586
