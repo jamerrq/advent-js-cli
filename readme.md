@@ -70,4 +70,4 @@ adventjs
 
 ## Demo
 
-https://github.com/jamerrq/advent-js-cli/assets/35697365/df9dc624-6efa-4e38-8800-4ec6058a4586
+https://github.com/jamerrq/advent-js-cli/assets/35697365/43b2c900-5026-42d7-8bee-1d5b8205106f
