@@ -1,8 +1,8 @@
-import { Select } from "@cliffy-prompt";
-import { delay } from '@delay';
-import { colors, } from "@cliffy-ansi";
-import * as mod from "@fs";
-import { printHighlight } from '@speedHighlight';
+import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
+import { delay } from 'https://deno.land/x/delay@v0.2.0/mod.ts';
+import { colors, } from "https://deno.land/x/cliffy@v1.0.0-rc.3/ansi/mod.ts";
+import * as mod from "https://deno.land/std@0.217.0/fs/mod.ts";
+import { printHighlight } from 'https://deno.land/x/speed_highlight_js@v1.2.6/src/terminal.js';
 
 import { ADVENT_JS_LOGO, ALTERNATIVE_LOGO } from './src/logos.ts';
 import {
