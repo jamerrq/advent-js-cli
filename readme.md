@@ -11,7 +11,7 @@
 ![deno](https://img.shields.io/badge/deno-^1.41.0-green?logo=deno)
 ![typescript](https://img.shields.io/badge/typescript-lightyellow?logo=typescript)
 ![javascript](https://img.shields.io/badge/javascript-blue?logo=javascript)
-![v0.0.1](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![v1.0.1](https://img.shields.io/badge/version-1.0.1-blue.svg)
 
 </div>
 
