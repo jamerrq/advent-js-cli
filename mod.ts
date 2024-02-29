@@ -7,7 +7,7 @@ import { printHighlight } from '@speedHighlight';
 import { ADVENT_JS_LOGO, ALTERNATIVE_LOGO } from './src/logos.ts';
 import {
     DESCRIPTION, INITIAL_CONFIG, ABOUT_THE_AUTHOR, MIDU_LINKS,
-    PROBLEMS, TEMPLATES as _TEMPLATES
+    PROBLEMS, TEMPLATES, TESTS
 } from './src/metadata.ts';
 
 import type { Config, ProblemDescription } from "./src/types.d.ts";
@@ -102,6 +102,10 @@ async function chooseEdition(lang: string = "en"): Promise<void> {
     }) as unknown as '2023';
 }
 
+/**
+ * Choose the flavor of the Advent JS
+ * @returns void
+ * */
 async function chooseFlavor(lang: string = "en"): Promise<void> {
     CONFIG.flavor = await Select.prompt({
         message: lang === "es"
@@ -169,8 +173,6 @@ async function showAboutAuthor(): Promise<void> {
  * Check if a problem exists
  * @param problemIndex The problem index
  * @returns boolean
- *
- *
 */
 async function problemExists(problemIndex: number): Promise<boolean> {
     return await mod.exists(`src/in/${problemIndex}.${CONFIG.flavor}`);
@@ -188,29 +190,71 @@ async function createProblemTemplate({
     if (!await mod.exists("src/in")) {
         await Deno.mkdir("src/in", { recursive: true });
     }
+    if (!await mod.exists("src/tests")) {
+        await Deno.mkdir("src/tests", { recursive: true });
+    }
     // Create the problem file
     // check if the file already exists
+    let ow1;
     if (await mod.exists(`src/in/${problemIndex}.${CONFIG.flavor}`)) {
         // ask the user if they want to overwrite the file
         const overwrite = await Select.prompt({
             message: CONFIG.language === "es"
-                ? `El archivo src/in/${problemIndex}.${CONFIG.flavor} ya existe. ¿Quieres sobreescribirlo?`
-                : `The file src/in/${problemIndex}.${CONFIG.flavor} already exists. Do you want to overwrite it?`,
+                ? `El archivo src/in/${problemIndex}.${CONFIG.flavor}` +
+                ' ya existe. ¿Quieres sobreescribirlo?'
+                : `The file src/in/${problemIndex}.${CONFIG.flavor}` +
+                ' already exists. Do you want to overwrite it?',
             options: ["Sí", "No"],
             default: "No",
         });
-        if (overwrite === "No") return;
+        if (overwrite === "No") ow1 = false;
     }
 
-    // in the templates/js folder there are the templates for the problems
-    const template = await Deno.readTextFile(`src/templates/js/${problemIndex}.js`);
-    await Deno.writeTextFile(
-        `src/in/${problemIndex}.${CONFIG.flavor}`,
-        template
-    );
+    // create the test file
+    // check if the file already exists
+    let ow2;
+    if (await mod.exists(`src/tests/${problemIndex}.spec.ts`)) {
+        // ask the user if they want to overwrite the file
+        const overwrite = await Select.prompt({
+            message: CONFIG.language === "es"
+                ? `El archivo src/tests/${problemIndex}.spec.ts` +
+                ' ya existe. ¿Quieres sobreescribirlo?'
+                : `The file src/tests/${problemIndex}.spec.ts` +
+                ' already exists. Do you want to overwrite it?',
+            options: ["Sí", "No"],
+            default: "No",
+        });
+        if (overwrite === "No") ow2 = false;
+    }
+
+    if (!ow1) {
+        await Deno.writeTextFile(
+            `src/tests/${problemIndex}.spec.ts`,
+            TESTS[problemIndex][CONFIG.flavor]
+        );
+    }
+
+    if (!ow2) {
+        await Deno.writeTextFile(
+            `src/in/${problemIndex}.${CONFIG.flavor}`,
+            TEMPLATES[problemIndex][CONFIG.flavor]
+        );
+    }
     console.log(colors.green(CONFIG.language === "es"
-        ? `\n ✓ Se creó un archivo para el problema ${problemIndex} en src/in/${problemIndex}.${CONFIG.flavor}\n`
-        : `\n ✓ A file was created for the problem in src/in/${problemIndex}.${CONFIG.flavor}\n`));
+        ? `\n ✓ Archivos creados para el problema ${problemIndex}` +
+        ` en src/in/${problemIndex}.${CONFIG.flavor}\n ✓ y en src/tests/${problemIndex}.spec.ts\n`
+        : `\n ✓ Files created for the problem ` +
+        `${problemIndex} in src/in/${problemIndex}.${CONFIG.flavor}\n` +
+        ` ✓ and in src/tests/${problemIndex}.spec.ts\n`));
+
+    // go and edit the file
+    console.log(CONFIG.language === "es"
+        ? "Abre el archivo src/in/" + problemIndex + "." + CONFIG.flavor +
+        " y escribe tu solución." +
+        "\n Cuando estés listo vuelve para probar tu solución."
+        : "Open the file src/in/" + problemIndex + "." + CONFIG.flavor +
+        " and write your solution." +
+        "\n When you're ready come back to test your solution.");
 
     // // option to open the file using vi
     // const openFile = await Select.prompt({
@@ -237,6 +281,12 @@ async function createProblemTemplate({
     await Deno.stdin.read(new Uint8Array(1));
 }
 
+/**
+ * Get the problem description
+ * @param lang The language
+ * @param problem The problem index
+ * @returns The problem description
+ * */
 const GET_PROBLEM_DATA = ({
     lang = 'en',
     problem = 1,
@@ -253,6 +303,55 @@ const GET_PROBLEM_DATA = ({
     };
 }
 
+async function testProblemSolution({
+    problemIndex = 1
+}): Promise<string | undefined> {
+    // run the test
+    const command = new Deno.Command(Deno.execPath(), {
+        args: [
+            "test",
+            `src/tests/${problemIndex}.spec.ts`,
+        ]
+    });
+    const { stdout, code } = await command.output();
+    const output = new TextDecoder().decode(stdout);
+    // show the output
+    console.log(CONFIG.language === "es"
+        ? "Resultados de las pruebas:"
+        : "Test results:");
+
+    console.log(output);
+
+    if (code === 0) {
+        console.log(colors.green(CONFIG.language === "es"
+            ? "🎉 TODAS LAS PRUEBAS PASARON 🥳"
+            : "🎉 ALL TESTS PASSED 🥳"));
+    }
+    if (code !== 0) {
+        console.log(colors.red(CONFIG.language === "es"
+            ? "ALGUNAS PRUEBAS FALLARON 💀"
+            : "SOME TESTS FAILED 💀"));
+
+        console.log(CONFIG.language === "es"
+            ? "Parece que hay un error en tu solución. " +
+            "Revisa el mensaje de error y vuelve a intentarlo."
+            : "It looks like there's an error in your solution. " +
+            "Check the error message and try again.");
+    }
+
+    // // wait for the user to 〉 Press enter
+    console.log(CONFIG.language === "es"
+        ? "〉 Presiona enter para continuar"
+        : "〉 Press enter to continue");
+    await Deno.stdin.read(new Uint8Array(1));
+    // return ;
+    return;
+}
+
+/**
+ * Show the problem menu
+ * @returns void
+ * */
 async function problemMenu({
     problemIndex = 1
 }): Promise<void> {
@@ -288,12 +387,13 @@ async function problemMenu({
             break;
         case "Probar tu solución":
         case "Test your solution":
-            // await testSolution({ problemIndex });
+            await testProblemSolution({ problemIndex });
             break;
         case "Volver":
         case "Go back":
             return;
     }
+    // await problemMenu({ problemIndex });
 }
 
 /**
@@ -340,13 +440,58 @@ async function showProblem(): Promise<void> {
     await problemMenu({ problemIndex: problemNumber });
 }
 
+async function downloadAllProblems(): Promise<void> {
+    // If no src/challenges/ folder exists, create it
+    if (!await mod.exists("src/in")) {
+        await Deno.mkdir("src/in", { recursive: true });
+    }
+    for (let i = 1; i <= 25; i++) {
+        // Create the problem file
+        // check if the file already exists
+        if (await mod.exists(`src/in/${i}.${CONFIG.flavor}`)) {
+            // ask the user if they want to overwrite the file
+            const overwrite = await Select.prompt({
+                message: CONFIG.language === "es"
+                    ? `El archivo src/in/${i}.${CONFIG.flavor}` +
+                    ' ya existe. ¿Quieres sobreescribirlo?'
+                    : `The file src/in/${i}.${CONFIG.flavor}` +
+                    ' already exists. Do you want to overwrite it?',
+                options: ["Sí", "No"],
+                default: "No",
+            });
+            if (overwrite === "No") continue;
+        }
+
+        // in the templates/js folder there are the templates for the problems
+        // const template = await Deno.readTextFile(
+        // `src/templates/js/${i}.js`
+        // );
+        const template = TEMPLATES[i][CONFIG.flavor]
+        await Deno.writeTextFile(
+            `src/in/${i}.${CONFIG.flavor}`,
+            template
+        );
+        console.log(colors.green(CONFIG.language === "es"
+            ? `✓ Se creó un archivo para el problema ${i}` +
+            ` en src/in/${i}.${CONFIG.flavor}`
+            : `✓ A file was created for the problem ` +
+            `${i} in src/in/${i}.${CONFIG.flavor}`));
+    }
+    // // wait for the user to 〉 Press enter
+    console.log(CONFIG.language === "es"
+        ? "〉 Presiona enter para continuar"
+        : "〉 Press enter to continue");
+    await Deno.stdin.read(new Uint8Array(1));
+}
+
 /**
  * Show the menu
  * @returns void
  * */
 async function menu(): Promise<void | 1> {
     // yellow blue title
-    console.log(colors.bgRgb24(colors.rgb24(" ADVENT JS console edition ", 0xFFED00), 0x24408E));
+    console.log(colors.bgRgb24(colors.rgb24(" ADVENT JS console edition ",
+        0xFFED00), 0x24408E));
     console.log();
     const option = await Select.prompt({
         message: CONFIG.language === "es"
@@ -354,6 +499,7 @@ async function menu(): Promise<void | 1> {
         options: CONFIG.language === "es"
             ? [
                 "Explora los retos",
+                "Descarga todos los retos",
                 "Mostrar configuración actual",
                 "Cambiar configuración",
                 "Sobre @midudev",
@@ -361,6 +507,7 @@ async function menu(): Promise<void | 1> {
             ]
             : [
                 "Explore challenges",
+                "Download all challenges",
                 "Show current config",
                 "Change config",
                 "About @midudev",
@@ -371,6 +518,10 @@ async function menu(): Promise<void | 1> {
         case "Explora los retos":
         case "Explore challenges":
             await showProblem();
+            break;
+        case "Descarga todos los retos":
+        case "Download all challenges":
+            await downloadAllProblems();
             break;
         case "Mostrar configuración actual":
         case "Show current config":
@@ -429,7 +580,8 @@ async function setup(override = false): Promise<void> {
  * Main function
  * @returns void
  * */
-async function main(): Promise<void> {
+export async function main(): Promise<void> {
+    await setup();
     console.clear();
     while (true) {
         console.clear();
