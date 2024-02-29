@@ -16,7 +16,8 @@
 </div>
 
 
-> [!WARNING] Don't star this repo
+> [!WARNING]
+> Don't star this repo!
 > This is a personal project to learn about Deno packages,
 > Console Apps and have fun coding with a project that I
 > enjoyed solving in the past.
