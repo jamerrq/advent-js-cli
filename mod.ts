@@ -67,7 +67,7 @@ async function printFlag({
         let print = "";
         for (const char of line) {
             if (!OUTSIDE_CHARS.includes(char)) {
-                if ("CONSLEDIT".includes(char)) {
+                if ("CONSLEDIT🎄".includes(char)) {
                     print += colors.bgRgb24(
                         colors.rgb24(colors.bold(char), 0xFFED00), 0x24408E);
                 } else print += colors.rgb24(colors.bold('█'), 0xFFED00);
@@ -122,9 +122,7 @@ async function chooseFlavor(lang: string = "en"): Promise<void> {
  * */
 async function chooseLang(lang = "en"): Promise<void> {
     CONFIG.language = await Select.prompt({
-        message: lang === "español"
-            ? "Elige el lenguaje para la CLI:"
-            : "Choose the language for the CLI:",
+        message: "Elige el idioma / Choose the language:",
         options: ["español", "english"],
         default: lang === "es" ? "español" : "english",
     }) === "español" ? "es" : "en";
